@@ -1,0 +1,4 @@
+Dr. Andrei Ionescu,45,0722-123-456,Cardiologie
+Dr. Maria Popescu,38,0723-654-321,Neurologie
+Dr. Ioan Vasile,50,0721-987-654,Chirurgie
+Dr. Elena Dumitrescu,42,0724-111-222,Psihiatrie
