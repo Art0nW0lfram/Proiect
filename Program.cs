@@ -82,11 +82,21 @@ class Program
                     int varstaMedic = int.Parse(Console.ReadLine());
                     Console.Write("Introdu telefonul medicului: ");
                     string telefonMedic = Console.ReadLine();
-                    Console.Write("Introdu specializarea medicului: ");
-                    string specializare = Console.ReadLine();
-                    Medic medicNou = new Medic(numeMedic, varstaMedic, telefonMedic, specializare);
-                    medicNou.SalveazaInFisier();
+                    Console.Write("Introdu specializarea medicului: Cardiologie, Neurologie, Chirurgie, Psihiatrie");
+                    string specializareText = Console.ReadLine();
+
+                    // Verificăm dacă specializarea este validă
+                    if (Enum.TryParse(specializareText, out SpecializareMedic specializare))
+                    {
+                        Medic medicNou = new Medic(numeMedic, varstaMedic, telefonMedic, specializare);
+                        medicNou.SalveazaInFisier();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Specializarea introdusă nu este validă.");
+                    }
                     break;
+
 
                 case "5":
                     // Adaugă pacient (citire de la tastatură)
