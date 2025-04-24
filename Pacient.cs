@@ -29,7 +29,7 @@ public class Pacient : Persoana
                 // Format: Id,Nume,Varsta,Telefon
                 writer.WriteLine($"{Id},{Nume},{Varsta},{Telefon}");
             }
-            Console.WriteLine("Pacient salvat cu succes în fișier.");
+            Console.WriteLine("Pacient salvat cu succes in fisier.");
         }
         catch (Exception ex)
         {
@@ -42,7 +42,7 @@ public class Pacient : Persoana
         List<Pacient> pacienti = new List<Pacient>();
         if (!File.Exists(filePath))
         {
-            Console.WriteLine("Fișierul de pacienți nu există.");
+            Console.WriteLine("Fisierul de pacienti nu exista.");
             return pacienti;
         }
 
@@ -64,7 +64,7 @@ public class Pacient : Persoana
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Eroare la citirea pacienților: {ex.Message}");
+            Console.WriteLine($"Eroare la citirea pacientilor: {ex.Message}");
         }
         return pacienti;
     }

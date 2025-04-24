@@ -1,5 +1,4 @@
-﻿Dr. Andrei Ionescu,45,0722-123-456,Chirurgie
-Dr. Maria Popescu,38,0723-654-321,Cardiologie
-Dr. Ioan Vasile,50,0721-987-654,Ortopedie
-Dr. Elena Dumitrescu,42,0724-111-222,Psihiatrie
-Dr. Gabriela Matei,35,0725-333-444,Dermatologie
+Dr. Mihai Popescu,65,0765468812,Neurologie
+Dr. Ion Ionel,70,0723567813,Cardiologie
+Dr. Valentina Iftimie,50,0745980011,Psihiatrie
+Dr. Robert Zaharia,40,0728546711,Chirurgie

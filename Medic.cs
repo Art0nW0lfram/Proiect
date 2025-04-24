@@ -21,85 +21,115 @@ public class Medic : Persoana
         Specializare = specializare;
     }
 
-    // Citirea medicilor din fișier
+    // Citirea medicilor din fisier
     public static List<Medic> CitesteDinFisier()
     {
         List<Medic> medici = new List<Medic>();
-        string path = "medici.txt"; // Fișierul din care citim medicii
+        string path = "medici.txt";
 
-        if (File.Exists(path))
+        if (!File.Exists(path))
         {
-            foreach (var line in File.ReadLines(path))
-            {
-                var parts = line.Split(',');
+            Console.WriteLine("Fisierul medici.txt nu exista.");
+            return medici;
+        }
 
-                // Verificăm dacă avem suficiente date pentru un medic
+        try
+        {
+            string[] linii = File.ReadAllLines(path);
+            for (int i = 0; i < linii.Length; i++)
+            {
+                string linie = linii[i].Trim();
+                if (string.IsNullOrWhiteSpace(linie))
+                    continue; // Ignora liniile goale
+
+                string[] parts = linie.Split(',');
                 if (parts.Length == 4)
                 {
-                    string nume = parts[0];
-                    int varsta = int.Parse(parts[1]);
-                    string telefon = parts[2];
-                    string specializareText = parts[3];
+                    try
+                    {
+                        string nume = parts[0].Trim();
+                        if (!int.TryParse(parts[1].Trim(), out int varsta))
+                        {
+                            Console.WriteLine($"Eroare la linia {i + 1}: Varsta '{parts[1]}' nu este un numar valid.");
+                            continue;
+                        }
+                        string telefon = parts[2].Trim();
+                        string specializareText = parts[3].Trim();
 
-                    // Verificăm dacă specializarea este validă
-                    if (Enum.TryParse(specializareText, out SpecializareMedic specializare))
-                    {
-                        medici.Add(new Medic(nume, varsta, telefon, specializare));
+                        if (Enum.TryParse(specializareText, true, out SpecializareMedic specializare))
+                        {
+                            medici.Add(new Medic(nume, varsta, telefon, specializare));
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Eroare la linia {i + 1}: Specializarea '{specializareText}' nu este valida.");
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        Console.WriteLine($"Linie invalidă (specializare greșită): {line}");
+                        Console.WriteLine($"Eroare la procesarea liniei {i + 1}: {ex.Message}");
                     }
                 }
                 else
                 {
-                    Console.WriteLine($"Linie invalidă: {line}");
+                    Console.WriteLine($"Eroare la linia {i + 1}: Format invalid (se asteapta 4 campuri, gasite {parts.Length}).");
                 }
             }
         }
-        else
+        catch (IOException ex)
         {
-            Console.WriteLine("Fișierul nu există.");
+            Console.WriteLine($"Eroare la citirea fisierului: {ex.Message}");
         }
 
         return medici;
     }
 
-    // Salvarea medicilor în fișier
+    // Salvarea medicilor in fisier
     public void SalveazaInFisier()
     {
         string path = "medici.txt";
 
         try
         {
-            // Deschidem fișierul pentru a adăuga la final
+            // Verifica daca numele contine virgule, care ar putea strica formatul
+            if (Nume.Contains(","))
+            {
+                Console.WriteLine("Numele medicului nu poate contine virgule.");
+                return;
+            }
+
+            // Deschidem fisierul pentru a adauga la final
             using (StreamWriter sw = new StreamWriter(path, true))
             {
-                // Verificăm dacă specializarea este validă
                 if (Enum.IsDefined(typeof(SpecializareMedic), this.Specializare))
                 {
-                    // Salvăm medicul doar dacă specializarea este validă
                     sw.WriteLine($"{Nume},{Varsta},{Telefon},{Specializare}");
                     Console.WriteLine("Medicul a fost salvat cu succes.");
                 }
                 else
                 {
-                    Console.WriteLine($"Specializarea '{Specializare}' nu este validă. Medicul nu a fost salvat.");
+                    Console.WriteLine($"Specializarea '{Specializare}' nu este valida. Medicul nu a fost salvat.");
                 }
             }
         }
         catch (UnauthorizedAccessException)
         {
-            Console.WriteLine("Eroare: Nu ai permisiunea de a salva fișierul. Verifică permisiunile fișierului.");
+            Console.WriteLine("Eroare: Nu ai permisiunea de a salva fisierul. Verifica permisiunile fisierului.");
         }
         catch (IOException ex)
         {
-            Console.WriteLine($"Eroare la salvarea fișierului: {ex.Message}");
+            Console.WriteLine($"Eroare la salvarea fisierului: {ex.Message}");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Eroare neașteptată: {ex.Message}");
+            Console.WriteLine($"Eroare neasteptata: {ex.Message}");
         }
     }
-
+    public override void AfiseazaInformatii()
+    {
+        // afișează întâi câmpurile de bază
+        base.AfiseazaInformatii();
+        // apoi specializarea
+        Console.WriteLine($"Specializare: {Specializare}");
+    }
 }

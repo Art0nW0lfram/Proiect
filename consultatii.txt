@@ -1,5 +1,1 @@
-﻿1,Dr. Andrei Ionescu,15/03/2025 10:00
-2,Dr. Maria Popescu,16/03/2025 11:30
-3,Dr. Ioan Vasile,17/03/2025 14:00
-4,Dr. Elena Dumitrescu,18/03/2025 09:00
-5,Dr. Gabriela Matei,19/03/2025 15:00
+1,Dr. Mihai Popescu,21/05/2025 12:00

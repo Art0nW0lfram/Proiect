@@ -17,7 +17,7 @@ namespace ClinicaMedicala
 
         public virtual void AfiseazaInformatii()
         {
-            Console.WriteLine($"Nume: {Nume}, Vârsta: {Varsta}, Telefon: {Telefon}");
+            Console.WriteLine($"Nume: {Nume}, Varsta: {Varsta}, Telefon: {Telefon}");
         }
     }
 }

@@ -5,8 +5,8 @@ using System;
 
 public class Consultatie
 {
-    public int PacientId { get; set; }       // Pentru a face legătura, stocăm ID-ul pacientului
-    public string MedicNume { get; set; }     // Stocăm numele medicului
+    public int PacientId { get; set; }       // Pentru a face legatura, stocam ID-ul pacientului
+    public string MedicNume { get; set; }     // Stocam numele medicului
     public DateTime Data { get; set; }
     private static string filePath = "consultatii.txt";
 
@@ -29,14 +29,14 @@ public class Consultatie
         {
             using (StreamWriter writer = new StreamWriter(filePath, true))
             {
-                // Format: PacientId,MedicNume,Data (data se salvează în formatul "dd/MM/yyyy HH:mm")
+                // Format: PacientId,MedicNume,Data (data se salveaza in formatul "dd/MM/yyyy HH:mm")
                 writer.WriteLine($"{PacientId},{MedicNume},{Data.ToString("dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture)}");
             }
-            Console.WriteLine("Consultație salvată cu succes în fișier.");
+            Console.WriteLine("Consultatie salvata cu succes in fisier.");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Eroare la salvarea consultației: {ex.Message}");
+            Console.WriteLine($"Eroare la salvarea consultatiei: {ex.Message}");
         }
     }
 
@@ -45,7 +45,7 @@ public class Consultatie
         List<Consultatie> consultatii = new List<Consultatie>();
         if (!File.Exists(filePath))
         {
-            Console.WriteLine("Fișierul de consultații nu există.");
+            Console.WriteLine("Fisierul de consultatii nu exista.");
             return consultatii;
         }
 
@@ -66,7 +66,7 @@ public class Consultatie
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Eroare la citirea consultațiilor: {ex.Message}");
+            Console.WriteLine($"Eroare la citirea consultarilor: {ex.Message}");
         }
         return consultatii;
     }
