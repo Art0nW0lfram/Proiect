@@ -35,7 +35,6 @@ namespace ClinicaMedicala
         {
             var medici = new List<Medic>();
             if (!File.Exists(filePath)) return medici;
-
             foreach (var linie in File.ReadAllLines(filePath))
             {
                 var parts = linie.Split(',');
@@ -44,7 +43,6 @@ namespace ClinicaMedicala
                 if (!int.TryParse(parts[1].Trim(), out int varsta)) continue;
                 var telefon = parts[2].Trim();
                 if (!Enum.TryParse(parts[3].Trim(), true, out SpecializareMedic spec)) continue;
-
                 medici.Add(new Medic(nume, varsta, telefon, spec));
             }
             return medici;
@@ -69,22 +67,37 @@ namespace ClinicaMedicala
 
         public static void AdaugaDinConsola()
         {
-            Console.Write("Introdu numele medicului: ");
-            var nume = Console.ReadLine();
-            if (string.IsNullOrWhiteSpace(nume)) { Console.WriteLine("Nume invalid."); return; }
+            // Citire nume
+            string nume;
+            do
+            {
+                Console.Write("Introdu numele medicului: ");
+                nume = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(nume))
+                    Console.WriteLine("Nume invalid.");
+            } while (string.IsNullOrWhiteSpace(nume));
 
-            Console.Write("Introdu varsta medicului: ");
-            if (!int.TryParse(Console.ReadLine(), out int varsta) || varsta < 0)
-            { Console.WriteLine("Varsta invalida."); return; }
+            // Citire varsta
+            int varsta;
+            do
+            {
+                Console.Write("Introdu varsta medicului: ");
+            } while (!int.TryParse(Console.ReadLine(), out varsta) || varsta < 0);
 
-            Console.Write("Introdu telefon (10 cifre): ");
-            var telefon = Console.ReadLine();
-            if (!Regex.IsMatch(telefon ?? "", "^\\d{10}$"))
-            { Console.WriteLine("Telefon invalid."); return; }
+            // Citire telefon
+            string telefon;
+            do
+            {
+                Console.Write("Introdu telefonul medicului (10 cifre): ");
+                telefon = Console.ReadLine();
+            } while (!Regex.IsMatch(telefon ?? "", @"^\d{10}$"));
 
-            Console.Write("Introdu specializarea (Cardiologie, Neurologie, Chirurgie, Psihiatrie): ");
-            if (!Enum.TryParse(Console.ReadLine(), true, out SpecializareMedic spec))
-            { Console.WriteLine("Specializare invalida."); return; }
+            // Citire specializare
+            SpecializareMedic spec;
+            do
+            {
+                Console.Write("Introdu specializarea medicului (Cardiologie, Neurologie, Chirurgie, Psihiatrie): ");
+            } while (!Enum.TryParse(Console.ReadLine(), true, out spec) || !Enum.IsDefined(typeof(SpecializareMedic), spec));
 
             new Medic(nume, varsta, telefon, spec).SalveazaInFisier();
         }
@@ -98,7 +111,8 @@ namespace ClinicaMedicala
                 .ToList();
             if (!found.Any()) Console.WriteLine("Nu s-au gasit medici.");
             else found.ForEach(m => {
-                m.AfiseazaInformatii(); Console.WriteLine("------");
+                m.AfiseazaInformatii();
+                Console.WriteLine("------");
             });
         }
     }

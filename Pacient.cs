@@ -27,7 +27,6 @@ namespace ClinicaMedicala
         {
             var list = new List<Pacient>();
             if (!File.Exists(filePath)) return list;
-
             foreach (var linie in File.ReadAllLines(filePath))
             {
                 var parts = linie.Split(',');
@@ -36,7 +35,6 @@ namespace ClinicaMedicala
                 var nume = parts[1].Trim();
                 if (!int.TryParse(parts[2].Trim(), out int varsta)) continue;
                 var telefon = parts[3].Trim();
-
                 list.Add(new Pacient(id, nume, varsta, telefon));
             }
             return list;
@@ -54,30 +52,42 @@ namespace ClinicaMedicala
             var pacienti = CitesteDinFisier();
             if (!pacienti.Any()) Console.WriteLine("Nu exista pacienti.");
             else pacienti.ForEach(p => {
-                p.AfiseazaInformatii(); Console.WriteLine("----------------------");
+                p.AfiseazaInformatii();
+                Console.WriteLine("----------------------");
             });
         }
 
         public static void AdaugaDinConsola()
         {
-            Console.Write("Introdu ID pacient: ");
-            if (!int.TryParse(Console.ReadLine(), out int id) || id <= 0)
-            { Console.WriteLine("ID invalid."); return; }
-            if (CitesteDinFisier().Any(p => p.Id == id))
-            { Console.WriteLine("ID duplicat."); return; }
+            // Citire ID
+            int id;
+            do
+            {
+                Console.Write("Introdu ID pacient: ");
+            } while (!int.TryParse(Console.ReadLine(), out id) || id <= 0 || CitesteDinFisier().Any(p => p.Id == id));
 
-            Console.Write("Introdu nume pacient: ");
-            var nume = Console.ReadLine();
-            if (string.IsNullOrWhiteSpace(nume)) { Console.WriteLine("Nume invalid."); return; }
+            // Citire nume
+            string nume;
+            do
+            {
+                Console.Write("Introdu nume pacient: ");
+                nume = Console.ReadLine();
+            } while (string.IsNullOrWhiteSpace(nume));
 
-            Console.Write("Introdu varsta pacient: ");
-            if (!int.TryParse(Console.ReadLine(), out int varsta) || varsta < 0)
-            { Console.WriteLine("Varsta invalida."); return; }
+            // Citire varsta
+            int varsta;
+            do
+            {
+                Console.Write("Introdu varsta pacient: ");
+            } while (!int.TryParse(Console.ReadLine(), out varsta) || varsta < 0);
 
-            Console.Write("Introdu telefon (10 cifre): ");
-            var telefon = Console.ReadLine();
-            if (!Regex.IsMatch(telefon ?? "", "^\\d{10}$"))
-            { Console.WriteLine("Telefon invalid."); return; }
+            // Citire telefon
+            string telefon;
+            do
+            {
+                Console.Write("Introdu telefonul pacientului (10 cifre): ");
+                telefon = Console.ReadLine();
+            } while (!Regex.IsMatch(telefon ?? "", @"^\d{10}$"));
 
             new Pacient(id, nume, varsta, telefon).SalveazaInFisier();
         }
@@ -91,7 +101,8 @@ namespace ClinicaMedicala
                 .ToList();
             if (!found.Any()) Console.WriteLine("Nu s-au gasit pacienti.");
             else found.ForEach(p => {
-                p.AfiseazaInformatii(); Console.WriteLine("------");
+                p.AfiseazaInformatii();
+                Console.WriteLine("------");
             });
         }
     }

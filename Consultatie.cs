@@ -22,7 +22,7 @@ namespace ClinicaMedicala
 
         public void AfiseazaDetalii()
         {
-            Console.WriteLine($"Consultatie: pacient {PacientId} cu {MedicNume}");
+            Console.WriteLine($"Consultatie: Pacient ID {PacientId} cu medicul {MedicNume}");
             Console.WriteLine($"Data: {Data:dd/MM/yyyy HH:mm}");
         }
 
@@ -30,15 +30,14 @@ namespace ClinicaMedicala
         {
             var list = new List<Consultatie>();
             if (!File.Exists(filePath)) return list;
-
             foreach (var linie in File.ReadAllLines(filePath))
             {
                 var parts = linie.Split(',');
                 if (parts.Length != 3) continue;
                 if (!int.TryParse(parts[0].Trim(), out int pid)) continue;
                 var medic = parts[1].Trim();
-                if (!DateTime.TryParseExact(parts[2].Trim(), "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dt)) continue;
-
+                if (!DateTime.TryParseExact(parts[2].Trim(), "dd/MM/yyyy HH:mm",
+                    CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dt)) continue;
                 list.Add(new Consultatie(pid, medic, dt));
             }
             return list;
@@ -56,24 +55,38 @@ namespace ClinicaMedicala
             var consultatii = CitesteDinFisier();
             if (!consultatii.Any()) Console.WriteLine("Nu exista consultatii.");
             else consultatii.ForEach(c => {
-                c.AfiseazaDetalii(); Console.WriteLine("----------------------");
+                c.AfiseazaDetalii();
+                Console.WriteLine("----------------------");
             });
         }
 
         public static void AdaugaDinConsola()
         {
-            Console.Write("Introdu ID pacient: ");
-            if (!int.TryParse(Console.ReadLine(), out int pid) || !Pacient.CitesteDinFisier().Any(p => p.Id == pid))
-            { Console.WriteLine("ID invalid sau inexistent."); return; }
+            // Citire ID pacient
+            int pid;
+            do
+            {
+                Console.Write("Introdu ID pacient: ");
+            } while (!int.TryParse(Console.ReadLine(), out pid)
+                     || !Pacient.CitesteDinFisier().Any(p => p.Id == pid));
 
-            Console.Write("Introdu nume medic: ");
-            var medic = Console.ReadLine();
-            if (string.IsNullOrWhiteSpace(medic) || !Medic.CitesteDinFisier().Any(m => m.Nume.Equals(medic, StringComparison.OrdinalIgnoreCase)))
-            { Console.WriteLine("Medic invalid."); return; }
+            // Citire nume medic
+            string medic;
+            do
+            {
+                Console.Write("Introdu nume medic: ");
+                medic = Console.ReadLine();
+            } while (string.IsNullOrWhiteSpace(medic)
+                     || !Medic.CitesteDinFisier()
+                         .Any(m => m.Nume.Equals(medic, StringComparison.OrdinalIgnoreCase)));
 
-            Console.Write("Introdu data (dd/MM/yyyy HH:mm): ");
-            if (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dt))
-            { Console.WriteLine("Format data invalid."); return; }
+            // Citire data
+            DateTime dt;
+            do
+            {
+                Console.Write("Introdu data (dd/MM/yyyy HH:mm): ");
+            } while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy HH:mm",
+                     CultureInfo.InvariantCulture, DateTimeStyles.None, out dt));
 
             new Consultatie(pid, medic, dt).SalveazaInFisier();
         }
@@ -82,11 +95,15 @@ namespace ClinicaMedicala
         {
             Console.Write("ID pacient: ");
             if (!int.TryParse(Console.ReadLine(), out int pid))
-            { Console.WriteLine("ID invalid."); return; }
-
+            {
+                Console.WriteLine("ID invalid."); return;
+            }
             var found = CitesteDinFisier().Where(c => c.PacientId == pid).ToList();
             if (!found.Any()) Console.WriteLine("Nu s-au gasit consultatii.");
-            else found.ForEach(c => { c.AfiseazaDetalii(); Console.WriteLine("------"); });
+            else found.ForEach(c => {
+                c.AfiseazaDetalii();
+                Console.WriteLine("------");
+            });
         }
     }
 }

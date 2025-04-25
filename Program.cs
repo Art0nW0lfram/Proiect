@@ -14,9 +14,9 @@ class Program
             Console.WriteLine("4. Adauga medic");
             Console.WriteLine("5. Adauga pacient");
             Console.WriteLine("6. Adauga consultatie");
-            Console.WriteLine("7. Cauta consultatii dupa ID pacient");
-            Console.WriteLine("8. Cauta medic dupa nume");
-            Console.WriteLine("9. Cauta pacient dupa nume");
+            Console.WriteLine("7. Cauta medic dupa nume");
+            Console.WriteLine("8. Cauta pacient dupa nume");
+            Console.WriteLine("9. Cauta consultatii dupa ID pacient");
             Console.WriteLine("10. Iesire");
             Console.Write("Alege o optiune: ");
 
@@ -28,9 +28,9 @@ class Program
                 case "4": Medic.AdaugaDinConsola(); break;
                 case "5": Pacient.AdaugaDinConsola(); break;
                 case "6": Consultatie.AdaugaDinConsola(); break;
-                case "7": Consultatie.CautaDupaId(); break;
-                case "8": Medic.CautaDupaNume(); break;
-                case "9": Pacient.CautaDupaNume(); break;
+                case "7": Medic.CautaDupaNume(); break;
+                case "8": Pacient.CautaDupaNume(); break;
+                case "9": Consultatie.CautaDupaId(); break;
                 case "10": return;
                 default: Console.WriteLine("Opţiune invalidă"); break;
             }
