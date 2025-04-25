@@ -73,8 +73,7 @@ namespace ClinicaMedicala
             {
                 Console.Write("Introdu numele medicului: ");
                 nume = Console.ReadLine();
-                if (string.IsNullOrWhiteSpace(nume))
-                    Console.WriteLine("Nume invalid.");
+                if (string.IsNullOrWhiteSpace(nume)) Console.WriteLine("Nume invalid.");
             } while (string.IsNullOrWhiteSpace(nume));
 
             // Citire varsta
@@ -90,7 +89,7 @@ namespace ClinicaMedicala
             {
                 Console.Write("Introdu telefonul medicului (10 cifre): ");
                 telefon = Console.ReadLine();
-            } while (!Regex.IsMatch(telefon ?? "", @"^\d{10}$"));
+            } while (!Regex.IsMatch(telefon ?? "", "^\\d{10}$"));
 
             // Citire specializare
             SpecializareMedic spec;
@@ -114,6 +113,75 @@ namespace ClinicaMedicala
                 m.AfiseazaInformatii();
                 Console.WriteLine("------");
             });
+        }
+
+        public static void EditeazaDinConsola()
+        {
+            Console.Write("Nume medic de editat: ");
+            var nume = Console.ReadLine();
+            var medici = CitesteDinFisier();
+            var m = medici.FirstOrDefault(x => x.Nume.Equals(nume, StringComparison.OrdinalIgnoreCase));
+            if (m == null)
+            {
+                Console.WriteLine("Medicul nu a fost găsit.");
+                return;
+            }
+
+            Console.Write($"Nume ({m.Nume}): ");
+            var input = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(input)) m.Nume = input;
+
+            while (true)
+            {
+                Console.Write($"Varsta ({m.Varsta}): ");
+                input = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(input)) break;
+                if (int.TryParse(input, out var v) && v >= 0)
+                {
+                    m.Varsta = v;
+                    break;
+                }
+                Console.WriteLine("Eroare: Varsta trebuie sa fie un numar >= 0.");
+            }
+
+            Console.Write($"Telefon ({m.Telefon}): ");
+            input = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(input) && Regex.IsMatch(input, "^\\d{10}$"))
+                m.Telefon = input;
+
+            while (true)
+            {
+                Console.Write($"Specializare ({m.Specializare}): ");
+                input = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(input)) break;
+                if (Enum.TryParse(input, true, out SpecializareMedic newSpec))
+                {
+                    m.Specializare = newSpec;
+                    break;
+                }
+                Console.WriteLine("Eroare: Specializare invalida.");
+            }
+
+            File.WriteAllLines(filePath,
+                medici.Select(x => $"{x.Nume},{x.Varsta},{x.Telefon},{x.Specializare}"));
+            Console.WriteLine("Medicul a fost actualizat cu succes.");
+        }
+
+        public static void StergeDinFisier()
+        {
+            Console.Write("Nume medic de sters: ");
+            var nume = Console.ReadLine();
+            var medici = CitesteDinFisier();
+            var m = medici.FirstOrDefault(x => x.Nume.Equals(nume, StringComparison.OrdinalIgnoreCase));
+            if (m == null)
+            {
+                Console.WriteLine("Medicul nu a fost găsit.");
+                return;
+            }
+            medici.Remove(m);
+            File.WriteAllLines(filePath,
+                medici.Select(x => $"{x.Nume},{x.Varsta},{x.Telefon},{x.Specializare}"));
+            Console.WriteLine("Medicul a fost șters cu succes.");
         }
     }
 }

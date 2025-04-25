@@ -62,25 +62,19 @@ namespace ClinicaMedicala
 
         public static void AdaugaDinConsola()
         {
-            // Citire ID pacient
             int pid;
             do
             {
                 Console.Write("Introdu ID pacient: ");
-            } while (!int.TryParse(Console.ReadLine(), out pid)
-                     || !Pacient.CitesteDinFisier().Any(p => p.Id == pid));
+            } while (!int.TryParse(Console.ReadLine(), out pid) || !Pacient.CitesteDinFisier().Any(p => p.Id == pid));
 
-            // Citire nume medic
             string medic;
             do
             {
                 Console.Write("Introdu nume medic: ");
                 medic = Console.ReadLine();
-            } while (string.IsNullOrWhiteSpace(medic)
-                     || !Medic.CitesteDinFisier()
-                         .Any(m => m.Nume.Equals(medic, StringComparison.OrdinalIgnoreCase)));
+            } while (string.IsNullOrWhiteSpace(medic) || !Medic.CitesteDinFisier().Any(m => m.Nume.Equals(medic, StringComparison.OrdinalIgnoreCase)));
 
-            // Citire data
             DateTime dt;
             do
             {
@@ -104,6 +98,82 @@ namespace ClinicaMedicala
                 c.AfiseazaDetalii();
                 Console.WriteLine("------");
             });
+        }
+
+        public static void EditeazaDinConsola()
+        {
+            Console.Write("ID pacient (cheie): ");
+            if (!int.TryParse(Console.ReadLine(), out int pidKey)) { Console.WriteLine("ID invalid."); return; }
+            Console.Write("Nume medic (cheie): ");
+            var numeKey = Console.ReadLine();
+            DateTime dataKey;
+            do
+            {
+                Console.Write("Data consultatie (cheie, dd/MM/yyyy HH:mm): ");
+            } while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy HH:mm",
+                     CultureInfo.InvariantCulture, DateTimeStyles.None, out dataKey));
+
+            var consultatii = CitesteDinFisier();
+            var c = consultatii.FirstOrDefault(x =>
+                x.PacientId == pidKey &&
+                x.MedicNume.Equals(numeKey, StringComparison.OrdinalIgnoreCase) &&
+                x.Data == dataKey);
+            if (c == null)
+            {
+                Console.WriteLine("Consultatia nu a fost gasita.");
+                return;
+            }
+
+            Console.Write($"PacientId ({c.PacientId}): ");
+            var input = Console.ReadLine();
+            if (int.TryParse(input, out int newPid)) c.PacientId = newPid;
+
+            Console.Write($"MedicNume ({c.MedicNume}): ");
+            input = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(input)) c.MedicNume = input;
+
+            while (true)
+            {
+                Console.Write($"Data ({c.Data:dd/MM/yyyy HH:mm}): ");
+                input = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(input)) break;
+                if (DateTime.TryParseExact(input, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime newDt))
+                {
+                    c.Data = newDt;
+                    break;
+                }
+                Console.WriteLine("Format data invalid.");
+            }
+
+            File.WriteAllLines(filePath,
+                consultatii.Select(x => $"{x.PacientId},{x.MedicNume},{x.Data:dd/MM/yyyy HH:mm}"));
+            Console.WriteLine("Consultatia a fost actualizata cu succes.");
+        }
+
+        public static void StergeDinFisier()
+        {
+            Console.Write("ID pacient: ");
+            if (!int.TryParse(Console.ReadLine(), out int pidKey)) { Console.WriteLine("ID invalid."); return; }
+            Console.Write("Nume medic: ");
+            var numeKey = Console.ReadLine();
+            DateTime dataKey;
+            do
+            {
+                Console.Write("Data consultatie (dd/MM/yyyy HH:mm): ");
+            } while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy HH:mm",
+                     CultureInfo.InvariantCulture, DateTimeStyles.None, out dataKey));
+
+            var consultatii = CitesteDinFisier();
+            var c = consultatii.FirstOrDefault(x => x.PacientId == pidKey && x.MedicNume.Equals(numeKey, StringComparison.OrdinalIgnoreCase) && x.Data == dataKey);
+            if (c == null)
+            {
+                Console.WriteLine("Consultatia nu a fost gasita.");
+                return;
+            }
+            consultatii.Remove(c);
+            File.WriteAllLines(filePath,
+                consultatii.Select(x => $"{x.PacientId},{x.MedicNume},{x.Data:dd/MM/yyyy HH:mm}"));
+            Console.WriteLine("Consultatia a fost stearsa cu succes.");
         }
     }
 }

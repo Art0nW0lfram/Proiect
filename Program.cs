@@ -17,7 +17,13 @@ class Program
             Console.WriteLine("7. Cauta medic dupa nume");
             Console.WriteLine("8. Cauta pacient dupa nume");
             Console.WriteLine("9. Cauta consultatii dupa ID pacient");
-            Console.WriteLine("10. Iesire");
+            Console.WriteLine("10. Editeaza medic");
+            Console.WriteLine("11. Sterge medic");
+            Console.WriteLine("12. Editeaza pacient");
+            Console.WriteLine("13. Sterge pacient");
+            Console.WriteLine("14. Editeaza consultatie");
+            Console.WriteLine("15. Sterge consultatie");
+            Console.WriteLine("16. Iesire");
             Console.Write("Alege o optiune: ");
 
             switch (Console.ReadLine())
@@ -31,7 +37,13 @@ class Program
                 case "7": Medic.CautaDupaNume(); break;
                 case "8": Pacient.CautaDupaNume(); break;
                 case "9": Consultatie.CautaDupaId(); break;
-                case "10": return;
+                case "10": Medic.EditeazaDinConsola(); break;
+                case "11": Medic.StergeDinFisier(); break;
+                case "12": Pacient.EditeazaDinConsola(); break;
+                case "13": Pacient.StergeDinFisier(); break;
+                case "14": Consultatie.EditeazaDinConsola(); break;
+                case "15": Consultatie.StergeDinFisier(); break;
+                case "16": return;
                 default: Console.WriteLine("Opţiune invalidă"); break;
             }
         }

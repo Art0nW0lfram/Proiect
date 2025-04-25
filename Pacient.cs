@@ -59,14 +59,12 @@ namespace ClinicaMedicala
 
         public static void AdaugaDinConsola()
         {
-            // Citire ID
             int id;
             do
             {
                 Console.Write("Introdu ID pacient: ");
             } while (!int.TryParse(Console.ReadLine(), out id) || id <= 0 || CitesteDinFisier().Any(p => p.Id == id));
 
-            // Citire nume
             string nume;
             do
             {
@@ -74,20 +72,18 @@ namespace ClinicaMedicala
                 nume = Console.ReadLine();
             } while (string.IsNullOrWhiteSpace(nume));
 
-            // Citire varsta
             int varsta;
             do
             {
                 Console.Write("Introdu varsta pacient: ");
             } while (!int.TryParse(Console.ReadLine(), out varsta) || varsta < 0);
 
-            // Citire telefon
             string telefon;
             do
             {
                 Console.Write("Introdu telefonul pacientului (10 cifre): ");
                 telefon = Console.ReadLine();
-            } while (!Regex.IsMatch(telefon ?? "", @"^\d{10}$"));
+            } while (!Regex.IsMatch(telefon ?? "", "^\\d{10}$"));
 
             new Pacient(id, nume, varsta, telefon).SalveazaInFisier();
         }
@@ -104,6 +100,66 @@ namespace ClinicaMedicala
                 p.AfiseazaInformatii();
                 Console.WriteLine("------");
             });
+        }
+
+        public static void EditeazaDinConsola()
+        {
+            Console.Write("ID pacient de editat: ");
+            if (!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Console.WriteLine("ID invalid."); return;
+            }
+            var pacienti = CitesteDinFisier();
+            var p = pacienti.FirstOrDefault(x => x.Id == id);
+            if (p == null)
+            {
+                Console.WriteLine("Pacientul nu a fost găsit."); return;
+            }
+
+            Console.Write($"ID ({p.Id}): ");
+            var input = Console.ReadLine();
+            if (int.TryParse(input, out int newId) && newId > 0) p.Id = newId;
+
+            Console.Write($"Nume ({p.Nume}): ");
+            input = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(input)) p.Nume = input;
+
+            while (true)
+            {
+                Console.Write($"Varsta ({p.Varsta}): ");
+                input = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(input)) break;
+                if (int.TryParse(input, out int v) && v >= 0) { p.Varsta = v; break; }
+                Console.WriteLine("Eroare: Varsta invalida.");
+            }
+
+            Console.Write($"Telefon ({p.Telefon}): ");
+            input = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(input) && Regex.IsMatch(input, "^\\d{10}$"))
+                p.Telefon = input;
+
+            File.WriteAllLines(filePath,
+                pacienti.Select(x => $"{x.Id},{x.Nume},{x.Varsta},{x.Telefon}"));
+            Console.WriteLine("Pacientul a fost actualizat cu succes.");
+        }
+
+        public static void StergeDinFisier()
+        {
+            Console.Write("ID pacient de sters: ");
+            if (!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Console.WriteLine("ID invalid."); return;
+            }
+            var pacienti = CitesteDinFisier();
+            var p = pacienti.FirstOrDefault(x => x.Id == id);
+            if (p == null)
+            {
+                Console.WriteLine("Pacientul nu a fost găsit."); return;
+            }
+            pacienti.Remove(p);
+            File.WriteAllLines(filePath,
+                pacienti.Select(x => $"{x.Id},{x.Nume},{x.Varsta},{x.Telefon}"));
+            Console.WriteLine("Pacientul a fost șters cu succes.");
         }
     }
 }
