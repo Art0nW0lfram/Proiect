@@ -1,0 +1,17 @@
+D:\PIU\Proiect\ClinicaMedicala.WinForms\bin\Debug\ClinicaMedicala.WinForms.exe.config
+D:\PIU\Proiect\ClinicaMedicala.WinForms\bin\Debug\ClinicaMedicala.WinForms.exe
+D:\PIU\Proiect\ClinicaMedicala.WinForms\bin\Debug\ClinicaMedicala.WinForms.pdb
+D:\PIU\Proiect\ClinicaMedicala.WinForms\bin\Debug\Proiect.exe
+D:\PIU\Proiect\ClinicaMedicala.WinForms\bin\Debug\Proiect.pdb
+D:\PIU\Proiect\ClinicaMedicala.WinForms\bin\Debug\Proiect.exe.config
+D:\PIU\Proiect\ClinicaMedicala.WinForms\obj\Debug\ClinicaMedicala.WinForms.csproj.AssemblyReference.cache
+D:\PIU\Proiect\ClinicaMedicala.WinForms\obj\Debug\ClinicaMedicala.WinForms.MainForm.resources
+D:\PIU\Proiect\ClinicaMedicala.WinForms\obj\Debug\ClinicaMedicala.WinForms.Properties.Resources.resources
+D:\PIU\Proiect\ClinicaMedicala.WinForms\obj\Debug\ClinicaMedicala.WinForms.csproj.GenerateResource.cache
+D:\PIU\Proiect\ClinicaMedicala.WinForms\obj\Debug\ClinicaMedicala.WinForms.csproj.CoreCompileInputs.cache
+D:\PIU\Proiect\ClinicaMedicala.WinForms\obj\Debug\ClinicaM.29ECCF2F.Up2Date
+D:\PIU\Proiect\ClinicaMedicala.WinForms\obj\Debug\ClinicaMedicala.WinForms.exe
+D:\PIU\Proiect\ClinicaMedicala.WinForms\obj\Debug\ClinicaMedicala.WinForms.pdb
+D:\PIU\Proiect\ClinicaMedicala.WinForms\bin\Debug\consultatii.txt
+D:\PIU\Proiect\ClinicaMedicala.WinForms\bin\Debug\medici.txt
+D:\PIU\Proiect\ClinicaMedicala.WinForms\bin\Debug\pacienti.txt
