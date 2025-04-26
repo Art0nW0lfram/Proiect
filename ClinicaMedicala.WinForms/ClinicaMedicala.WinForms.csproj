@@ -46,6 +46,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormAddConsultatie.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAddConsultatie.Designer.cs">
+      <DependentUpon>FormAddConsultatie.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormAddMedic.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAddMedic.Designer.cs">
+      <DependentUpon>FormAddMedic.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormAddPacient.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAddPacient.Designer.cs">
+      <DependentUpon>FormAddPacient.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -54,6 +72,15 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FormAddConsultatie.resx">
+      <DependentUpon>FormAddConsultatie.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAddMedic.resx">
+      <DependentUpon>FormAddMedic.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAddPacient.resx">
+      <DependentUpon>FormAddPacient.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

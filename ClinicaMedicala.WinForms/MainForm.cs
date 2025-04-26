@@ -20,5 +20,35 @@ namespace ClinicaMedicala.WinForms
             // Folosim dgvConsultati conform numelui din Designer
             dgvConsultati.DataSource = Consultatie.CitesteDinFisier();
         }
+
+        private void btnAddPacient_Click(object sender, EventArgs e)
+        {
+            using (var f = new FormAddPacient())
+                if (f.ShowDialog() == DialogResult.OK)
+                    dgvPacienti.DataSource = Pacient.CitesteDinFisier();
+        }
+
+
+        private void btnAddMedic_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FormAddMedic())
+            {
+                if (frm.ShowDialog() == DialogResult.OK)
+                    dgvMedici.DataSource = Medic.CitesteDinFisier();
+            }
+        }
+
+        private void btnAddConsultatie_Click(object sender, EventArgs e)
+        {
+            using (var f = new FormAddConsultatie())
+                if (f.ShowDialog() == DialogResult.OK)
+                    dgvConsultati.DataSource = Consultatie.CitesteDinFisier();
+        }
+
+
+        private void dgvMedici_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

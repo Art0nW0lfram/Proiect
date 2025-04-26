@@ -15,3 +15,6 @@ D:\PIU\Proiect\ClinicaMedicala.WinForms\obj\Debug\ClinicaMedicala.WinForms.pdb
 D:\PIU\Proiect\ClinicaMedicala.WinForms\bin\Debug\consultatii.txt
 D:\PIU\Proiect\ClinicaMedicala.WinForms\bin\Debug\medici.txt
 D:\PIU\Proiect\ClinicaMedicala.WinForms\bin\Debug\pacienti.txt
+D:\PIU\Proiect\ClinicaMedicala.WinForms\obj\Debug\ClinicaMedicala.WinForms.FormAddMedic.resources
+D:\PIU\Proiect\ClinicaMedicala.WinForms\obj\Debug\ClinicaMedicala.WinForms.FormAddConsultatie.resources
+D:\PIU\Proiect\ClinicaMedicala.WinForms\obj\Debug\ClinicaMedicala.WinForms.FormAddPacient.resources
