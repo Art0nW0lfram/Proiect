@@ -70,7 +70,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(800, 450);
             this.tableLayoutPanel1.TabIndex = 0;
-            this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
             // lblNume
             // 
@@ -159,7 +158,6 @@
             this.btnSaveMedic.TabIndex = 9;
             this.btnSaveMedic.Text = "Salvează";
             this.btnSaveMedic.UseVisualStyleBackColor = false;
-            this.btnSaveMedic.Click += new System.EventHandler(this.btnSaveMedic_Click);
             // 
             // FormAddMedic
             // 
@@ -169,7 +167,6 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "FormAddMedic";
             this.Text = "FormAddMedic";
-            this.Load += new System.EventHandler(this.FormAddMedic_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);

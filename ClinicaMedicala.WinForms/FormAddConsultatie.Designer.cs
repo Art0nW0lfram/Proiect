@@ -33,9 +33,9 @@
             this.lblMedic = new System.Windows.Forms.Label();
             this.lblData = new System.Windows.Forms.Label();
             this.lblError = new System.Windows.Forms.Label();
-            this.txtIdPacient = new System.Windows.Forms.TextBox();
-            this.comboMedici = new System.Windows.Forms.ComboBox();
-            this.dateTimePicker = new System.Windows.Forms.DateTimePicker();
+            this.txtPacientId = new System.Windows.Forms.TextBox();
+            this.cboMedic = new System.Windows.Forms.ComboBox();
+            this.dtpData = new System.Windows.Forms.DateTimePicker();
             this.btnSaveConsultatie = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -50,9 +50,9 @@
             this.tableLayoutPanel1.Controls.Add(this.lblMedic, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.lblData, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.lblError, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.txtIdPacient, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.comboMedici, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.dateTimePicker, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.txtPacientId, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.cboMedic, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.dtpData, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.btnSaveConsultatie, 1, 3);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
@@ -65,7 +65,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(800, 450);
             this.tableLayoutPanel1.TabIndex = 0;
-            this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
             // lblIdPacient
             // 
@@ -104,29 +103,31 @@
             this.lblError.Size = new System.Drawing.Size(0, 16);
             this.lblError.TabIndex = 3;
             // 
-            // txtIdPacient
+            // txtPacientId
             // 
-            this.txtIdPacient.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.txtIdPacient.Location = new System.Drawing.Point(403, 4);
-            this.txtIdPacient.Name = "txtIdPacient";
-            this.txtIdPacient.Size = new System.Drawing.Size(100, 22);
-            this.txtIdPacient.TabIndex = 4;
+            this.txtPacientId.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.txtPacientId.Location = new System.Drawing.Point(403, 4);
+            this.txtPacientId.Name = "txtPacientId";
+            this.txtPacientId.Size = new System.Drawing.Size(100, 22);
+            this.txtPacientId.TabIndex = 4;
             // 
-            // comboMedici
+            // cboMedic
             // 
-            this.comboMedici.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.comboMedici.FormattingEnabled = true;
-            this.comboMedici.Location = new System.Drawing.Point(403, 93);
-            this.comboMedici.Name = "comboMedici";
-            this.comboMedici.Size = new System.Drawing.Size(121, 24);
-            this.comboMedici.TabIndex = 5;
+            this.cboMedic.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.cboMedic.FormattingEnabled = true;
+            this.cboMedic.Location = new System.Drawing.Point(403, 93);
+            this.cboMedic.Name = "cboMedic";
+            this.cboMedic.Size = new System.Drawing.Size(121, 24);
+            this.cboMedic.TabIndex = 5;
             // 
-            // dateTimePicker
+            // dtpData
             // 
-            this.dateTimePicker.Location = new System.Drawing.Point(403, 182);
-            this.dateTimePicker.Name = "dateTimePicker";
-            this.dateTimePicker.Size = new System.Drawing.Size(200, 22);
-            this.dateTimePicker.TabIndex = 6;
+            this.dtpData.CustomFormat = "dd/MM/yyyy HH:mm";
+            this.dtpData.Location = new System.Drawing.Point(403, 182);
+            this.dtpData.Name = "dtpData";
+            this.dtpData.ShowUpDown = true;
+            this.dtpData.Size = new System.Drawing.Size(200, 22);
+            this.dtpData.TabIndex = 6;
             // 
             // btnSaveConsultatie
             // 
@@ -137,7 +138,6 @@
             this.btnSaveConsultatie.TabIndex = 7;
             this.btnSaveConsultatie.Text = "Salvează";
             this.btnSaveConsultatie.UseVisualStyleBackColor = false;
-            this.btnSaveConsultatie.Click += new System.EventHandler(this.btnSaveConsultatie_Click);
             // 
             // FormAddConsultatie
             // 
@@ -160,9 +160,9 @@
         private System.Windows.Forms.Label lblMedic;
         private System.Windows.Forms.Label lblData;
         private System.Windows.Forms.Label lblError;
-        private System.Windows.Forms.TextBox txtIdPacient;
-        private System.Windows.Forms.ComboBox comboMedici;
-        private System.Windows.Forms.DateTimePicker dateTimePicker;
+        private System.Windows.Forms.TextBox txtPacientId;
+        private System.Windows.Forms.ComboBox cboMedic;
+        private System.Windows.Forms.DateTimePicker dtpData;
         private System.Windows.Forms.Button btnSaveConsultatie;
     }
 }

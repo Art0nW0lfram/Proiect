@@ -1,100 +1,69 @@
 ﻿using System;
-using System.Drawing;
-using System.Text.RegularExpressions;
+using System.Linq;
 using System.Windows.Forms;
-using ClinicaMedicala;
+using System.IO;
 
 namespace ClinicaMedicala.WinForms
 {
     public partial class FormAddMedic : Form
     {
-        // Limite de validare
-        private const int MIN_AGE = 0;
-        private const int MAX_AGE = 120;
-        private const int PHONE_LENGTH = 10;
+        private Medic _editing;
 
-        // Interval implicit consultații
-        private static readonly TimeSpan DEFAULT_START = TimeSpan.Parse("09:00");
-        private static readonly TimeSpan DEFAULT_END = TimeSpan.Parse("17:00");
-
+        // Constructor implicit (adaugă)
         public FormAddMedic()
         {
             InitializeComponent();
-            this.Load += FormAddMedic_Load;
-        }
-
-        private void FormAddMedic_Load(object sender, EventArgs e)
-        {
-            // Populează ComboBox-ul cu enum SpecializareMedic
             comboSpecializare.DataSource = Enum.GetValues(typeof(SpecializareMedic));
-            comboSpecializare.SelectedIndex = -1;
-
-            // Mesaj de eroare gol la început
-            lblError.Text = string.Empty;
-            lblError.ForeColor = Color.Red;
+            btnSaveMedic.Click += BtnSaveMedic_Click;
         }
 
-        private void btnSaveMedic_Click(object sender, EventArgs e)
+        // Constructor pentru editare (preîncarcă câmpurile)
+        public FormAddMedic(Medic existing) : this()
         {
-            bool valid = true;
-            lblError.Text = string.Empty;
-
-            // Validare Nume
-            if (string.IsNullOrWhiteSpace(txtNume.Text))
-            {
-                lblNume.ForeColor = Color.Red;
-                valid = false;
-            }
-            else lblNume.ForeColor = Color.Black;
-
-            // Validare Vârstă
-            if (!int.TryParse(txtVarsta.Text, out int age) || age < MIN_AGE || age > MAX_AGE)
-            {
-                lblVarsta.ForeColor = Color.Red;
-                valid = false;
-            }
-            else lblVarsta.ForeColor = Color.Black;
-
-            // Validare Telefon
-            if (txtTelefon.Text.Length != PHONE_LENGTH || !Regex.IsMatch(txtTelefon.Text, "^\\d{10}$"))
-            {
-                lblTelefon.ForeColor = Color.Red;
-                valid = false;
-            }
-            else lblTelefon.ForeColor = Color.Black;
-
-            // Validare Specializare
-            if (comboSpecializare.SelectedItem == null)
-            {
-                lblSpec.ForeColor = Color.Red;
-                valid = false;
-            }
-            else lblSpec.ForeColor = Color.Black;
-
-            if (!valid)
-            {
-                lblError.Text = "Te rog corectează câmpurile evidențiate în roșu.";
-                return;
-            }
-
-            // Creează și salvează medicul cu interval implicit
-            var spec = (SpecializareMedic)comboSpecializare.SelectedItem;
-            var medic = new Medic(
-                txtNume.Text.Trim(),
-                age,
-                txtTelefon.Text.Trim(),
-                spec,
-                DEFAULT_START,
-                DEFAULT_END);
-            medic.SalveazaInFisier();
-
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            _editing = existing;
+            txtNume.Text = existing.Nume;
+            txtVarsta.Text = existing.Varsta.ToString();
+            txtTelefon.Text = existing.Telefon;
+            comboSpecializare.SelectedItem = existing.Specializare;
+            btnSaveMedic.Text = "Salvează Modificările";
         }
 
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        private void BtnSaveMedic_Click(object sender, EventArgs e)
         {
 
+            if (_editing != null)
+            {
+                var list = Medic.CitesteDinFisier().ToList();
+
+                _editing.Nume = txtNume.Text.Trim();
+                _editing.Varsta = int.Parse(txtVarsta.Text);
+                _editing.Telefon = txtTelefon.Text.Trim();
+                _editing.Specializare = (SpecializareMedic)comboSpecializare.SelectedItem;
+
+                // Rescrie fișierul
+                File.WriteAllLines("medici.txt", list
+                    .Select(m => $"{m.Nume},{m.Varsta},{m.Telefon},{m.Specializare}")
+                );
+
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            else
+            {
+                // Adaugă nou medic cu interval implicit 09:00-17:00
+                var nou = new Medic(
+                    txtNume.Text.Trim(),
+                    int.Parse(txtVarsta.Text),
+                    txtTelefon.Text.Trim(),
+                    (SpecializareMedic)comboSpecializare.SelectedItem,
+                    TimeSpan.Parse("09:00"),
+                    TimeSpan.Parse("17:00")
+                );
+
+                nou.SalveazaInFisier();
+                DialogResult = DialogResult.OK;
+                Close();
+            }
         }
     }
 }

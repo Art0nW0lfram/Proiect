@@ -1,87 +1,108 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ClinicaMedicala.WinForms
 {
     public partial class FormAddConsultatie : Form
     {
+        private Consultatie _editing;
+
         public FormAddConsultatie()
         {
             InitializeComponent();
+
+            // Populează ComboBox-ul cu lista de medici
+            cboMedic.DataSource = Medic.CitesteDinFisier()
+                                      .Select(m => m.Nume)
+                                      .ToList();
+            cboMedic.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            // Configurează DateTimePicker pentru data și ora consultatiei
+            dtpData.Format = DateTimePickerFormat.Custom;
+            dtpData.CustomFormat = "dd/MM/yyyy HH:mm";
+            dtpData.ShowUpDown = true;
+
+            btnSaveConsultatie.Click += BtnSaveConsultatie_Click;
         }
 
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        public FormAddConsultatie(Consultatie existing) : this()
         {
+            _editing = existing;
+            txtPacientId.Text = existing.PacientId.ToString();
+            cboMedic.SelectedItem = existing.MedicNume;
+            dtpData.Value = existing.Data;
 
+            txtPacientId.ReadOnly = true;
+            btnSaveConsultatie.Text = "Salvează Modificările";
         }
 
-        private void btnSaveConsultatie_Click(object sender, EventArgs e)
+        private void BtnSaveConsultatie_Click(object sender, EventArgs e)
         {
-            bool valid = true;
-            lblError.Text = string.Empty;
-
-            // 1. Validare ID pacient
-            if (!int.TryParse(txtIdPacient.Text, out int pid) ||
-                !Pacient.CitesteDinFisier().Any(p => p.Id == pid))
+            // Validare ID pacient
+            if (!int.TryParse(txtPacientId.Text.Trim(), out int pid) || pid <= 0)
             {
-                lblIdPacient.ForeColor = Color.Red;
-                valid = false;
-            }
-            else
-            {
-                lblIdPacient.ForeColor = Color.Black;
-            }
-
-            // 2. Validare Medic (există în listă?)
-            var medicName = comboMedici.SelectedItem as string;
-            var medicObj = Medic.CitesteDinFisier()
-                                 .FirstOrDefault(m =>
-                                     m.Nume.Equals(medicName, StringComparison.OrdinalIgnoreCase));
-            if (medicObj == null)
-            {
-                lblMedic.ForeColor = Color.Red;
-                valid = false;
-            }
-            else
-            {
-                lblMedic.ForeColor = Color.Black;
-            }
-
-            // 3. Validare Data/Ora în interval
-            var dt = dateTimePicker.Value;
-            var ora = dt.TimeOfDay;
-            if (medicObj == null || ora < medicObj.OraStart || ora > medicObj.OraEnd)
-            {
-                lblData.ForeColor = Color.Red;
-                valid = false;
-            }
-            else
-            {
-                lblData.ForeColor = Color.Black;
-            }
-
-            // Dacă găsim erori, afișăm mesaj și ieșim
-            if (!valid)
-            {
-                lblError.Text = "Verifică datele completate.";
+                MessageBox.Show("ID pacient invalid.");
                 return;
             }
 
-            // Dacă e totul ok, creăm și salvăm consultatia
-            var consult = new Consultatie(pid, medicObj.Nume, dt);
-            consult.SalveazaInFisier();
+            // Validare medic selectat
+            if (cboMedic.SelectedItem == null)
+            {
+                MessageBox.Show("Selectează un medic din listă.");
+                return;
+            }
 
-            // Închidem cu OK ca MainForm să știe să reîncarce grila
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            // Preia data și ora din DateTimePicker
+            DateTime dt = dtpData.Value;
+            string medicName = cboMedic.SelectedItem.ToString();
+
+            // Verifică disponibilitatea medicului
+            var medicObj = Medic.CitesteDinFisier()
+                                 .FirstOrDefault(m => m.Nume.Equals(medicName, StringComparison.OrdinalIgnoreCase));
+            if (medicObj != null)
+            {
+                var ora = dt.TimeOfDay;
+                if (ora < medicObj.OraStart || ora > medicObj.OraEnd)
+                {
+                    MessageBox.Show(
+                        $"Medic indisponibil la ora aleasă. Program: {medicObj.OraStart:HH\\:mm}–{medicObj.OraEnd:HH\\:mm}.");
+                    return;
+                }
+            }
+
+            if (_editing != null)
+            {
+                // Editare consultatie existing
+                var list = Consultatie.CitesteDinFisier().ToList();
+                var target = list.FirstOrDefault(c =>
+                    c.PacientId == _editing.PacientId &&
+                    c.MedicNume == _editing.MedicNume &&
+                    c.Data == _editing.Data);
+                if (target != null)
+                {
+                    target.PacientId = pid;
+                    target.MedicNume = medicName;
+                    target.Data = dt;
+                }
+
+                File.WriteAllLines(
+                    "consultatii.txt",
+                    list.Select(c => $"{c.PacientId},{c.MedicNume},{c.Data:dd/MM/yyyy HH:mm}"));
+
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            else
+            {
+                // Adăugare consultatie nouă
+                var nou = new Consultatie(pid, medicName, dt);
+                nou.SalveazaInFisier();
+
+                DialogResult = DialogResult.OK;
+                Close();
+            }
         }
-
     }
 }

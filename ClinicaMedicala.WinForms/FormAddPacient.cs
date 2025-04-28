@@ -1,101 +1,83 @@
 ﻿using System;
-using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using ClinicaMedicala;
 
 namespace ClinicaMedicala.WinForms
 {
     public partial class FormAddPacient : Form
     {
-        // Limite de validare
-        private const int MIN_AGE = 0;
-        private const int MAX_AGE = 120;
-        private const int PHONE_LENGTH = 10;
+        private Pacient _editing;
+        private int _oldId;
 
+        // Constructor pentru adăugare
         public FormAddPacient()
         {
             InitializeComponent();
-            this.Load += FormAddPacient_Load;
+            btnSavePacient.Click += BtnSavePacient_Click;
         }
 
-        private void FormAddPacient_Load(object sender, EventArgs e)
+        // Constructor pentru editare (preîncarcă câmpurile și păstrează ID-ul vechi)
+        public FormAddPacient(Pacient existing) : this()
         {
-            // Curăță mesajul de eroare la început
-            lblError.Text = string.Empty;
-            lblError.ForeColor = Color.Red;
+            _editing = existing;
+            _oldId = existing.Id;
+
+            txtId.Text = existing.Id.ToString();
+            txtNume.Text = existing.Nume;
+            txtVarsta.Text = existing.Varsta.ToString();
+            txtTelefon.Text = existing.Telefon;
+            txtId.ReadOnly = true;
+            btnSavePacient.Text = "Salvează Modificările";
         }
 
-        private void btnSavePacient_Click(object sender, EventArgs e)
+        private void BtnSavePacient_Click(object sender, EventArgs e)
         {
-            bool valid = true;
-            lblError.Text = string.Empty;
-
-            // Validare ID
-            if (!int.TryParse(txtId.Text, out int id) || id <= 0 ||
-                Pacient.CitesteDinFisier().Any(p => p.Id == id))
+            // Validări
+            if (string.IsNullOrWhiteSpace(txtNume.Text) ||
+                !int.TryParse(txtVarsta.Text, out int varsta) || varsta < 0 ||
+                !Regex.IsMatch(txtTelefon.Text.Trim(), "^\\d{10}$"))
             {
-                lblId.ForeColor = Color.Red;
-                valid = false;
-            }
-            else
-            {
-                lblId.ForeColor = Color.Black;
-            }
-
-            // Validare Nume
-            if (string.IsNullOrWhiteSpace(txtNume.Text))
-            {
-                lblNume.ForeColor = Color.Red;
-                valid = false;
-            }
-            else
-            {
-                lblNume.ForeColor = Color.Black;
-            }
-
-            // Validare Vârstă
-            if (!int.TryParse(txtVarsta.Text, out int age) || age < MIN_AGE || age > MAX_AGE)
-            {
-                lblVarsta.ForeColor = Color.Red;
-                valid = false;
-            }
-            else
-            {
-                lblVarsta.ForeColor = Color.Black;
-            }
-
-            // Validare Telefon
-            if (txtTelefon.Text.Length != PHONE_LENGTH || !Regex.IsMatch(txtTelefon.Text, "^\\d{10}$"))
-            {
-                lblTelefon.ForeColor = Color.Red;
-                valid = false;
-            }
-            else
-            {
-                lblTelefon.ForeColor = Color.Black;
-            }
-
-            // Dacă există erori, afișează mesaj și oprește
-            if (!valid)
-            {
-                lblError.Text = "Corectează câmpurile evidențiate cu roșu.";
+                MessageBox.Show("Te rog corectează câmpurile valide.");
                 return;
             }
 
-            // Creează și salvează pacientul
-            var pacient = new Pacient(id, txtNume.Text.Trim(), age, txtTelefon.Text.Trim());
-            pacient.SalveazaInFisier();
+            if (_editing != null)
+            {
+                // Editare
+                var list = Pacient.CitesteDinFisier().ToList();
+                var target = list.FirstOrDefault(p => p.Id == _oldId);
+                if (target != null)
+                {
+                    target.Nume = txtNume.Text.Trim();
+                    target.Varsta = varsta;
+                    target.Telefon = txtTelefon.Text.Trim();
+                }
 
-            // Închide și semnalează OK
-            this.DialogResult = DialogResult.OK;
-            this.Close();
-        }
+                File.WriteAllLines("pacienti.txt",
+                    list.Select(p => $"{p.Id},{p.Nume},{p.Varsta},{p.Telefon}"));
 
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            else
+            {
+                // Adăugare nou pacient
+                int id;
+                if (!int.TryParse(txtId.Text, out id) || id <= 0)
+                {
+                    MessageBox.Show("ID invalid.");
+                    return;
+                }
+                var nou = new Pacient(id,
+                                      txtNume.Text.Trim(),
+                                      varsta,
+                                      txtTelefon.Text.Trim());
+                nou.SalveazaInFisier();
+                DialogResult = DialogResult.OK;
+                Close();
+            }
         }
     }
 }
