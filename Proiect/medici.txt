@@ -1,0 +1,5 @@
+Dr. Mihai Popescu,65,0765468812,Neurologie,09:00,13:00
+Dr. Ion Ionel,70,0723567813,Cardiologie,08:30,12:30
+Dr. Valentina Iftimie,50,0745980011,Psihiatrie,13:00,17:00
+Dr. Robert Zaharia,40,0728546711,Chirurgie,10:00,16:00
+Dr. Elena Marinescu,42,0723456789,MedicinaGenerala,08:00,14:00
