@@ -17,3 +17,4 @@ D:\PIU\Proiect-master\ClinicaMedicala.WinForms\obj\Release\ClinicaMedicala.WinFo
 D:\PIU\Proiect-master\ClinicaMedicala.WinForms\obj\Release\ClinicaM.29ECCF2F.Up2Date
 D:\PIU\Proiect-master\ClinicaMedicala.WinForms\obj\Release\ClinicaMedicala.WinForms.exe
 D:\PIU\Proiect-master\ClinicaMedicala.WinForms\obj\Release\ClinicaMedicala.WinForms.pdb
+D:\PIU\Proiect-master\ClinicaMedicala.WinForms\bin\Release\medici.txt

@@ -36,7 +36,7 @@ namespace ClinicaMedicala
         {
             base.AfiseazaInformatii();
             Console.WriteLine($"Specializare: {Specializare}");
-            Console.WriteLine($"Disponibil: {OraStart.ToString(@"hh\:mm")}–{OraEnd.ToString(@"hh\:mm")}\n");
+            Console.WriteLine($"Disponibil: {OraStart:hh\\:mm}–{OraEnd:hh\\:mm}\n");
         }
 
         public static List<Medic> CitesteDinFisier()
@@ -74,7 +74,7 @@ namespace ClinicaMedicala
 
         public void SalveazaInFisier()
         {
-            var linie = $"{Nume},{Varsta},{Telefon},{Specializare},{OraStart.ToString(@"hh\:mm")},{OraEnd.ToString(@"hh\:mm")}";
+            var linie = $"{Nume},{Varsta},{Telefon},{Specializare},{OraStart:hh\\:mm},{OraEnd:hh\\:mm}";
             var prefix = File.Exists(filePath) ? Environment.NewLine : string.Empty;
             File.AppendAllText(filePath, prefix + linie);
             Console.WriteLine("Medicul a fost salvat cu succes.");
@@ -173,45 +173,56 @@ namespace ClinicaMedicala
             }
 
             Console.Write($"Nume ({m.Nume}): ");
-            var input = Console.ReadLine(); if (!string.IsNullOrWhiteSpace(input)) m.Nume = input;
+            var input = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(input)) m.Nume = input;
 
             while (true)
             {
                 Console.Write($"Varsta ({m.Varsta}): ");
-                input = Console.ReadLine(); if (string.IsNullOrWhiteSpace(input)) break;
+                input = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(input)) break;
                 if (int.TryParse(input, out var v) && v >= 0) { m.Varsta = v; break; }
                 Console.WriteLine("Eroare: varsta invalidă.");
             }
 
             Console.Write($"Telefon ({m.Telefon}): ");
-            input = Console.ReadLine(); if (!string.IsNullOrWhiteSpace(input) && Regex.IsMatch(input, @"^\d{10}$")) m.Telefon = input;
+            input = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(input) && Regex.IsMatch(input, @"^\d{10}$"))
+                m.Telefon = input;
 
             while (true)
             {
                 Console.Write($"Specializare ({m.Specializare}): ");
-                input = Console.ReadLine(); if (string.IsNullOrWhiteSpace(input)) break;
+                input = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(input)) break;
                 if (Enum.TryParse(input, true, out SpecializareMedic ns)) { m.Specializare = ns; break; }
                 Console.WriteLine("Eroare: specializare invalidă.");
             }
 
             while (true)
             {
-                Console.Write($"Ora start ({m.OraStart.ToString(@"hh\:mm")}): ");
-                input = Console.ReadLine(); if (string.IsNullOrWhiteSpace(input)) break;
+                Console.Write($"Ora start ({m.OraStart:hh\\:mm}): ");
+                input = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(input)) break;
                 if (TimeSpan.TryParse(input, out TimeSpan s)) { m.OraStart = s; break; }
                 Console.WriteLine("Eroare: format ora invalid.");
             }
 
             while (true)
             {
-                Console.Write($"Ora end ({m.OraEnd.ToString(@"hh\:mm")}): ");
-                input = Console.ReadLine(); if (string.IsNullOrWhiteSpace(input)) break;
+                Console.Write($"Ora end ({m.OraEnd:hh\\:mm}): ");
+                input = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(input)) break;
                 if (TimeSpan.TryParse(input, out TimeSpan e) && e > m.OraStart) { m.OraEnd = e; break; }
                 Console.WriteLine("Eroare: ora end trebuie sa fie dupa start.");
             }
 
+            // Rescriem fișierul păstrând intervalul orar
             File.WriteAllLines(filePath,
-                medici.Select(x => $"{x.Nume},{x.Varsta},{x.Telefon},{x.Specializare},{x.OraStart.ToString(@"hh\:mm")},{x.OraEnd.ToString(@"hh\:mm")}"));
+                medici.Select(x =>
+                    $"{x.Nume},{x.Varsta},{x.Telefon},{x.Specializare},{x.OraStart:hh\\:mm},{x.OraEnd:hh\\:mm}"
+                )
+            );
             Console.WriteLine("Medicul a fost actualizat.");
         }
 
@@ -227,8 +238,12 @@ namespace ClinicaMedicala
                 return;
             }
             medici.Remove(m);
+            // Rescriem fișierul păstrând intervalul orar
             File.WriteAllLines(filePath,
-                medici.Select(x => $"{x.Nume},{x.Varsta},{x.Telefon},{x.Specializare},{x.OraStart.ToString(@"hh\:mm")},{x.OraEnd.ToString(@"hh\:mm")}"));
+                medici.Select(x =>
+                    $"{x.Nume},{x.Varsta},{x.Telefon},{x.Specializare},{x.OraStart:hh\\:mm},{x.OraEnd:hh\\:mm}"
+                )
+            );
             Console.WriteLine("Medicul a fost sters.");
         }
     }

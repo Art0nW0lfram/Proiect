@@ -122,7 +122,7 @@ namespace ClinicaMedicala.WinForms
                 {
                     var list = Medic.CitesteDinFisier().ToList();
                     list.RemoveAll(m => m.Nume == medic.Nume && m.Varsta == medic.Varsta);
-                    File.WriteAllLines("medici.txt", list.Select(m => $"{m.Nume},{m.Varsta},{m.Telefon},{m.Specializare}"));
+                    File.WriteAllLines("medici.txt", list.Select(m =>$"{m.Nume},{m.Varsta},{m.Telefon},{m.Specializare},{m.OraStart:hh\\:mm},{m.OraEnd:hh\\:mm}"));
                     dgvMedici.DataSource = list;
                 }
             }

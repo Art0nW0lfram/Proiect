@@ -1,0 +1,5 @@
+Dr. Mihai Popescu,65,0765468812,Neurologie
+Dr. Ion Ionel,70,0723567813,Cardiologie
+Dr. Valentina Iftimie,50,0745980011,Psihiatrie
+Dr. Robert Zaharia,40,0728546711,Chirurgie
+Dr. Elena Marinescu,42,0723456789,MedicinaGenerala
