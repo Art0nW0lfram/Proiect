@@ -55,3 +55,6 @@ D:\PIU\Proiect-master\ClinicaMedicala.WinForms\bin\Debug\Proiect.exe
 D:\PIU\Proiect-master\ClinicaMedicala.WinForms\bin\Debug\Proiect.pdb
 D:\PIU\Proiect-master\ClinicaMedicala.WinForms\bin\Debug\Proiect.exe.config
 D:\PIU\Proiect-master\ClinicaMedicala.WinForms\obj\Debug\ClinicaM.29ECCF2F.Up2Date
+D:\PIU\Proiect-master\ClinicaMedicala.WinForms\bin\Debug\consultatii.txt
+D:\PIU\Proiect-master\ClinicaMedicala.WinForms\bin\Debug\medici.txt
+D:\PIU\Proiect-master\ClinicaMedicala.WinForms\bin\Debug\pacienti.txt

@@ -73,6 +73,7 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Paths.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormAddConsultatie.resx">
@@ -119,12 +120,15 @@
     <EmbeddedResource Include="hospital_medical_consultation_icon_140164.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\Debug\consultatii.txt" />
-    <Content Include="bin\Debug\medici.txt" />
-    <Content Include="bin\Debug\pacienti.txt" />
-    <Content Include="consultatii.txt" />
-    <Content Include="medici.txt" />
-    <Content Include="pacienti.txt" />
+    <Content Include="consultatii.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="medici.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="pacienti.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

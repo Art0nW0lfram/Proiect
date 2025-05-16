@@ -1,10 +1,18 @@
 ﻿using ClinicaMedicala;
 using System;
+using System.IO;
 
 class Program
 {
     static void Main()
     {
+        var dataDir = Path.GetFullPath(
+           Path.Combine(AppDomain.CurrentDomain.BaseDirectory,@"..\..\..\Data"));
+        if (Directory.Exists(dataDir))
+            Directory.SetCurrentDirectory(dataDir);
+        else
+            Console.WriteLine("Folder Data nu exista: " + dataDir);
+
         while (true)
         {
             Console.WriteLine("\nMeniu:");
